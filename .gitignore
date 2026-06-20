@@ -6,3 +6,4 @@ __pycache__/
 .env
 Dockerfile
 DEVPOST_SUBMISSION.md
+*.zip
