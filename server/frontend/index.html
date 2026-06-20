@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TerraLens — Local Climate Action Assistant</title>
+    <meta name="description" content="Satellite-grounded, locally-actionable climate intelligence. Drop a pin, see what's really happening around you.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- App styles -->
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/story.css">
+    <link rel="stylesheet" href="/static/ui-enhance.css">
+</head>
+<body>
+    <!-- ═══ HERO / LANDING ═══ -->
+    <section id="hero" class="hero">
+        <div class="hero-bg-grid"></div>
+        <div class="hero-glow"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                USAII Global AI Hackathon 2026
+            </div>
+            <h1 class="hero-title">
+                <span class="title-accent">Terra</span>Lens
+            </h1>
+            <p class="hero-subtitle">
+                Satellite-grounded climate intelligence for your exact location.<br>
+                Not generic advice — real data, real actions, right where you are.
+            </p>
+            <div class="hero-buttons-row">
+                <button id="btn-start" class="btn-primary" onclick="scrollToMap()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Drop a Pin to Begin
+                </button>
+                <button id="btn-play-story" class="btn-play-story" onclick="promptStory()">
+                    <span class="play-icon">
+                        <svg viewBox="0 0 24 24" fill="white" stroke="none">
+                            <polygon points="8,5 19,12 8,19"/>
+                        </svg>
+                    </span>
+                    Play Story
+                    <span class="play-badge">45s</span>
+                </button>
+            </div>
+            <div style="font-size:0.8rem; color:var(--text-muted); margin-top:14px; display:flex; justify-content:center; align-items:center; gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Note: Story Mode runs live AI synthesis and may take up to 30 seconds to load.
+            </div>
+            <div class="hero-features">
+                <div class="feature-chip">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    Real-time Data
+                </div>
+                <div class="feature-chip">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    Satellite Vision
+                </div>
+                <div class="feature-chip">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    Responsible AI
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator" onclick="scrollToMap()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- ═══ MAP SECTION ═══ -->
+    <section id="map-section" class="map-section">
+        <div class="section-header">
+            <h2>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                </svg>
+                Select Your Location
+            </h2>
+            <p>Click anywhere on the map to drop a pin, or use the search bar. Your location is never stored.</p>
+        </div>
+
+        <div class="map-controls">
+            <div class="search-box">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="text" id="search-input" placeholder="Search a city or place..." autocomplete="off">
+                <button id="btn-search" class="btn-icon" onclick="searchLocation()" title="Search">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+            <button id="btn-geolocate" class="btn-secondary" onclick="geolocateUser()" title="Use my location (optional)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>
+                </svg>
+                Use My Location
+            </button>
+        </div>
+
+        <div class="map-wrapper">
+            <div id="map"></div>
+            <div id="coord-display" class="coord-display hidden">
+                <span class="coord-label">Selected:</span>
+                <span id="coord-lat">—</span>, <span id="coord-lon">—</span>
+            </div>
+        </div>
+
+        <div class="radius-control">
+            <label for="radius-slider">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                Scan Radius: <strong id="radius-value">15</strong> km
+            </label>
+            <input type="range" id="radius-slider" min="5" max="50" value="15" step="5">
+        </div>
+
+        <button id="btn-analyze" class="btn-primary btn-analyze disabled" onclick="runAnalysis()" disabled>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+            Analyze This Location
+        </button>
+    </section>
+
+    <!-- ═══ TIME WARNING MODAL ═══ -->
+    <div id="time-warning-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    Comprehensive Analysis
+                </h3>
+            </div>
+            <div class="modal-body">
+                <p>Generating a localized climate profile requires heavy real-time processing. This will take <strong>~1.5 to 2 minutes</strong> to complete.</p>
+                <p style="margin-top: 1rem;"><strong>Why does it take this long?</strong></p>
+                <ul class="reasons-list">
+                    <li>🛰️ <strong>Satellite Imagery:</strong> Fetching & stitching 9 high-res map tiles.</li>
+                    <li>🏭 <strong>Live Data:</strong> Querying weather & tracking nearby emission sources.</li>
+                    <li>👁️ <strong>Vision AI:</strong> Running NVIDIA AI to analyze land cover.</li>
+                    <li>🧠 <strong>Synthesis:</strong> Generating custom climate action recommendations.</li>
+                </ul>
+            </div>
+            <div class="modal-footer" style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 1.5rem;">
+                <button class="btn-secondary" onclick="cancelAnalysis()">Cancel</button>
+                <button class="btn-primary" onclick="confirmAnalysis()">Proceed</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ STORY WARNING MODAL ═══ -->
+    <div id="story-warning-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                    Start Story Mode
+                </h3>
+            </div>
+            <div class="modal-body">
+                <p>Story Mode generates an immersive, live presentation of the climate data. Generating this requires heavy real-time processing and will take <strong>up to 3 minutes</strong> to complete.</p>
+                <p style="margin-top: 1rem;"><strong>Live Data Sources:</strong></p>
+                <ul class="reasons-list">
+                    <li>🛰️ Google Maps Satellite Composite</li>
+                    <li>🏭 ClimateTrace Global Emissions</li>
+                    <li>👁️ NVIDIA NIM Vision Analysis</li>
+                    <li>🧠 LLM Context Synthesis</li>
+                </ul>
+            </div>
+            <div class="modal-footer" style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 1.5rem;">
+                <button class="btn-secondary" onclick="cancelStory()">Cancel</button>
+                <button class="btn-primary" onclick="confirmStory()">Start Pre-computing</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ LOADING STATE ═══ -->
+    <section id="loading-section" class="loading-section hidden">
+        <div class="loading-container">
+            <div class="loading-orb">
+                <div class="orb-ring"></div>
+                <div class="orb-ring"></div>
+                <div class="orb-ring"></div>
+                <svg class="orb-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+            </div>
+            <h2 class="loading-title">Analyzing Your Area</h2>
+            <div id="pin-loading-timer" style="font-family:var(--mono); font-size:1.1rem; color:var(--accent); margin-bottom: 1.5rem; text-align: center;">0.0s elapsed</div>
+            <div class="loading-steps">
+                <div class="step" id="step-tiles">
+                    <div class="step-indicator"><div class="step-dot active"></div></div>
+                    <span>Fetching satellite imagery...</span>
+                </div>
+                <div class="step" id="step-data">
+                    <div class="step-indicator"><div class="step-dot"></div></div>
+                    <span>Pulling weather & emissions data...</span>
+                </div>
+                <div class="step" id="step-vision">
+                    <div class="step-indicator"><div class="step-dot"></div></div>
+                    <span>AI analyzing land cover...</span>
+                </div>
+                <div class="step" id="step-synth">
+                    <div class="step-indicator"><div class="step-dot"></div></div>
+                    <span>Generating local climate profile...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ DASHBOARD / RESULTS ═══ -->
+    <section id="dashboard" class="dashboard hidden">
+        <div class="dashboard-header">
+            <div>
+                <h2>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    Climate Profile
+                </h2>
+                <p id="dashboard-location" class="dashboard-location">—</p>
+            </div>
+            <div class="dashboard-meta">
+                <span id="dashboard-timestamp" class="meta-tag">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    <span>—</span>
+                </span>
+                <span id="dashboard-confidence" class="meta-tag confidence-tag">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span>—</span>
+                </span>
+                <button class="btn-primary btn-small" onclick="exportData()" id="btn-export">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Export JSON
+                </button>
+                <button class="btn-secondary btn-small" onclick="resetApp()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                    New Analysis
+                </button>
+            </div>
+        </div>
+
+        <!-- Row 1: Satellite + Weather -->
+        <div class="dashboard-grid-top">
+            <div class="card card-satellite" id="card-satellite">
+                <div class="card-header">
+                    <h3>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+                        Satellite View
+                    </h3>
+                    <span class="card-badge" id="vision-quality">—</span>
+                </div>
+                <div class="satellite-image-wrapper">
+                    <img id="satellite-img" src="" alt="Satellite composite" class="satellite-img">
+                </div>
+                <div id="land-cover-bar" class="land-cover-bar"></div>
+            </div>
+
+            <div class="card card-weather" id="card-weather">
+                <div class="card-header">
+                    <h3>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><path d="M23 12a5 5 0 0 0-5-5 4 4 0 0 0-8 0 5 5 0 0 0-4 5h17z"/></svg>
+                        Current Conditions
+                    </h3>
+                </div>
+                <div class="weather-grid" id="weather-grid">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2: Area Profile -->
+        <div class="card card-profile" id="card-profile">
+            <div class="card-header">
+                <h3>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+                    Area Profile
+                </h3>
+            </div>
+            <div class="profile-content" id="profile-text">—</div>
+            <div class="notable-features" id="notable-features"></div>
+        </div>
+
+        <!-- Row 3: Emitter Table -->
+        <div class="card card-emitters" id="card-emitters">
+            <div class="card-header">
+                <h3>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                    Nearby Emission Sources
+                </h3>
+                <span class="card-badge" id="emitter-count">0 sources</span>
+            </div>
+            <div class="table-wrapper">
+                <table id="emitter-table">
+                    <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th>Sector</th>
+                            <th>Distance</th>
+                            <th>Emissions (t CO₂e)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="emitter-tbody">
+                        <!-- Filled by JS -->
+                    </tbody>
+                </table>
+                <div id="no-emitters" class="empty-state hidden">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><path d="M8 15h8M9 9h.01M15 9h.01"/></svg>
+                    <p>No emission sources found within the scan radius.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 4: Action Cards -->
+        <div class="card card-actions" id="card-actions">
+            <div class="card-header">
+                <h3>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+                    Recommended Actions
+                </h3>
+            </div>
+            <div class="actions-grid" id="actions-grid">
+                <!-- Filled by JS -->
+            </div>
+        </div>
+
+        <!-- Row 5: Responsible AI Notes -->
+        <div class="card card-responsible" id="card-responsible">
+            <div class="card-header">
+                <h3>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    Responsible AI Notes
+                </h3>
+            </div>
+            <p id="responsible-text" class="responsible-text">—</p>
+            <div class="data-sources">
+                <h4>Data Sources</h4>
+                <div class="source-tags">
+                    <a href="https://climatetrace.org" target="_blank" rel="noopener" class="source-tag">ClimateTrace</a>
+                    <a href="https://open-meteo.com" target="_blank" rel="noopener" class="source-tag">Open-Meteo</a>
+                    <a href="https://build.nvidia.com" target="_blank" rel="noopener" class="source-tag">NVIDIA NIM</a>
+                    <a href="https://server.arcgisonline.com" target="_blank" rel="noopener" class="source-tag">Esri / Google Tiles</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Errors banner -->
+        <div id="errors-banner" class="errors-banner hidden">
+            <div class="card-header">
+                <h3>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                    Warnings
+                </h3>
+            </div>
+            <ul id="errors-list"></ul>
+        </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p><strong>TerraLens</strong> — Built for USAII Global AI Hackathon 2026 (High School Track, Challenge 2)</p>
+            <p class="footer-privacy">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Your location is never stored. All data is processed in-session only.
+            </p>
+        </div>
+    </footer>
+
+    <script src="/static/story.js"></script>
+    <script src="/static/script.js"></script>
+</body>
+</html>
