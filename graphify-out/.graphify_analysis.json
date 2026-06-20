@@ -1,0 +1,275 @@
+{
+  "communities": {
+    "0": [
+      "backend_llm",
+      "backend_llm_analyze_image",
+      "backend_llm_get_client",
+      "backend_llm_rationale_1",
+      "backend_llm_rationale_107",
+      "backend_llm_rationale_164",
+      "backend_llm_rationale_77",
+      "backend_llm_synthesize",
+      "backend_main",
+      "backend_main_analyze_location",
+      "backend_main_health_check",
+      "backend_main_rationale_1",
+      "backend_main_rationale_176",
+      "backend_main_rationale_65",
+      "backend_main_rationale_71",
+      "backend_main_serve_index",
+      "backend_schemas_synthesisresult",
+      "backend_schemas_visionanalysis",
+      "openai",
+      "synthesisresult",
+      "visionanalysis"
+    ],
+    "1": [
+      "static_script",
+      "static_script_animatesteps",
+      "static_script_cancelanalysis",
+      "static_script_cancelstory",
+      "static_script_confirmanalysis",
+      "static_script_confirmstory",
+      "static_script_escapehtml",
+      "static_script_exportdata",
+      "static_script_geolocateuser",
+      "static_script_initmap",
+      "static_script_promptstory",
+      "static_script_renderactions",
+      "static_script_renderdashboard",
+      "static_script_renderemitters",
+      "static_script_renderweather",
+      "static_script_resetapp",
+      "static_script_runanalysis",
+      "static_script_scrolltomap",
+      "static_script_searchlocation",
+      "static_script_setpin"
+    ],
+    "2": [
+      "asyncclient",
+      "backend_tiles",
+      "backend_tiles_fetch_composite",
+      "backend_tiles_fetch_tile",
+      "backend_tiles_lat_lon_to_tile",
+      "backend_tiles_minimal_png",
+      "backend_tiles_rationale_1",
+      "backend_tiles_rationale_147",
+      "backend_tiles_rationale_39",
+      "backend_tiles_rationale_54",
+      "backend_tiles_rationale_71",
+      "image",
+      "tests_test_tiles",
+      "tests_test_tiles_test_fetch_composite_fallback",
+      "tests_test_tiles_test_lat_lon_to_tile",
+      "tests_test_tiles_test_minimal_png"
+    ],
+    "3": [
+      "analyzerequest",
+      "backend_schemas",
+      "backend_schemas_actionitem",
+      "backend_schemas_analyzerequest",
+      "backend_schemas_analyzeresponse",
+      "backend_schemas_confidence",
+      "backend_schemas_effort",
+      "backend_schemas_imagequality",
+      "backend_schemas_landcover",
+      "backend_schemas_rationale_1",
+      "backend_schemas_weatherdata",
+      "basemodel",
+      "enum",
+      "str"
+    ],
+    "4": [
+      "any",
+      "backend_emissions",
+      "backend_emissions_fetch_from_climatetrace",
+      "backend_emissions_haversine",
+      "backend_emissions_rationale_1",
+      "backend_emissions_rationale_22",
+      "backend_emissions_rationale_38",
+      "backend_emissions_rationale_87",
+      "backend_emissions_scan_local_emissions",
+      "backend_schemas_emitterentry",
+      "emitterentry",
+      "tests_test_emissions",
+      "tests_test_emissions_test_haversine",
+      "tests_test_emissions_test_scan_local_emissions_empty"
+    ],
+    "5": [
+      "backend_weather",
+      "backend_weather_fetch_open_meteo",
+      "backend_weather_fetch_openweathermap",
+      "backend_weather_fetch_weather",
+      "backend_weather_rationale_1",
+      "backend_weather_rationale_121",
+      "backend_weather_rationale_18",
+      "backend_weather_rationale_41",
+      "backend_weather_rationale_90",
+      "backend_weather_wmo_to_text",
+      "tests_test_weather",
+      "tests_test_weather_test_fetch_weather_fallback",
+      "tests_test_weather_test_wmo_to_text",
+      "weatherdata"
+    ],
+    "6": [
+      "backend_llm_extract_json",
+      "backend_llm_rationale_92",
+      "tests_test_llm",
+      "tests_test_llm_test_extract_json_clean",
+      "tests_test_llm_test_extract_json_invalid",
+      "tests_test_llm_test_extract_json_markdown"
+    ],
+    "7": [
+      "backend_benchmarks",
+      "backend_benchmarks_get_benchmarks",
+      "backend_benchmarks_haversine",
+      "backend_benchmarks_load_benchmarks"
+    ],
+    "8": [
+      "tests_test_main",
+      "tests_test_main_test_analyze_endpoint_missing_body",
+      "tests_test_main_test_health_check"
+    ],
+    "9": [
+      "static_story",
+      "static_story_storyengine"
+    ],
+    "10": [
+      "backend_init"
+    ],
+    "11": [
+      "server_init"
+    ],
+    "12": [
+      "tests_init"
+    ]
+  },
+  "cohesion": {
+    "0": 0.17142857142857143,
+    "1": 0.13157894736842105,
+    "2": 0.2,
+    "3": 0.26373626373626374,
+    "4": 0.24175824175824176,
+    "5": 0.23076923076923078,
+    "6": 0.5333333333333333,
+    "7": 0.8333333333333334,
+    "8": 0.6666666666666666,
+    "9": 1.0,
+    "10": 1.0,
+    "11": 1.0,
+    "12": 1.0
+  },
+  "gods": [
+    {
+      "id": "backend_main_analyze_location",
+      "label": "analyze_location()",
+      "degree": 12
+    },
+    {
+      "id": "backend_schemas_weatherdata",
+      "label": "WeatherData",
+      "degree": 11
+    },
+    {
+      "id": "backend_emissions_scan_local_emissions",
+      "label": "scan_local_emissions()",
+      "degree": 10
+    },
+    {
+      "id": "backend_schemas_visionanalysis",
+      "label": "VisionAnalysis",
+      "degree": 10
+    },
+    {
+      "id": "backend_tiles_fetch_composite",
+      "label": "fetch_composite()",
+      "degree": 10
+    },
+    {
+      "id": "backend_weather_fetch_weather",
+      "label": "fetch_weather()",
+      "degree": 10
+    },
+    {
+      "id": "backend_llm_extract_json",
+      "label": "_extract_json()",
+      "degree": 8
+    },
+    {
+      "id": "backend_llm_analyze_image",
+      "label": "analyze_image()",
+      "degree": 8
+    },
+    {
+      "id": "backend_llm_synthesize",
+      "label": "synthesize()",
+      "degree": 8
+    },
+    {
+      "id": "backend_schemas_synthesisresult",
+      "label": "SynthesisResult",
+      "degree": 7
+    }
+  ],
+  "surprises": [
+    {
+      "source": "EmitterEntry",
+      "target": "EmitterEntry",
+      "source_files": [
+        "server/backend/emissions.py",
+        "server/backend/schemas.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; peripheral node `EmitterEntry` unexpectedly reaches hub `EmitterEntry`"
+    },
+    {
+      "source": "Any",
+      "target": "EmitterEntry",
+      "source_files": [
+        "server/backend/emissions.py",
+        "server/backend/schemas.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; peripheral node `Any` unexpectedly reaches hub `EmitterEntry`"
+    },
+    {
+      "source": "AnalyzeRequest",
+      "target": "VisionAnalysis",
+      "source_files": [
+        "server/backend/main.py",
+        "server/backend/schemas.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "WeatherData",
+      "target": "WeatherData",
+      "source_files": [
+        "server/backend/weather.py",
+        "server/backend/schemas.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "analyze_location()",
+      "target": "get_benchmarks()",
+      "source_files": [
+        "server/backend/main.py",
+        "server/backend/benchmarks.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}
