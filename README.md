@@ -2,6 +2,10 @@
 
 TerraLens is a robust, location-based intelligence application developed for the USAII Global AI Hackathon 2026. It replaces generic climate advice with hyper-local, actionable insights by orchestrating a high-performance 5-stage data and AI pipeline.
 
+A localized, interactive climate information and action-recommendation engine. TerraLens allows users to drop a pin on a map, select a radius (5km-50km), and instantly receive a detailed climate profile of that location. It achieves this by integrating real-time weather data, satellite imagery analysis, and global emissions data to provide actionable, tailored recommendations for climate resilience and mitigation.
+
+### Live At: https://adhyanshaa-terralens.hf.space/
+
 ## 🚀 Project Overview
 
 TerraLens bridges the gap between global climate data and local impact. By combining satellite imagery, live weather conditions, and global emissions data, it synthesizes an individualized "Area Profile" for any coordinate on Earth. 
